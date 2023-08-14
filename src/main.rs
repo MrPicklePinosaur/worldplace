@@ -3,5 +3,5 @@ mod ether;
 
 #[tokio::main]
 async fn main() {
-    contract::deploy().await.unwrap();
+    let _ = contract::deploy().await.unwrap();
 }

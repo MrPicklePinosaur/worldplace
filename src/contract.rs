@@ -1,9 +1,14 @@
 use std::{path::PathBuf, sync::Arc, time::Duration};
 
 use ethers::{
-    prelude::*,
+    contract::{abigen, ContractFactory},
+    core::utils::Anvil,
+    middleware::SignerMiddleware,
+    prelude::k256::{ecdsa::SigningKey, elliptic_curve::consts::U2, Secp256k1},
+    providers::{Http, Provider},
+    signers::{LocalWallet, Signer, Wallet},
     solc::{Artifact, Project, ProjectPathsConfig},
-    utils::Anvil,
+    types::U256,
 };
 use log::{error, info};
 
@@ -42,13 +47,20 @@ pub async fn deploy() -> anyhow::Result<()> {
     let client = Arc::new(client);
 
     let factory = ContractFactory::new(abi.unwrap(), bytecode.unwrap(), client.clone());
-    let contract = factory.deploy(0u64).unwrap().send().await.unwrap();
+    let contract = factory
+        .deploy((U256::from(32), U256::from(32)))
+        .unwrap()
+        .send()
+        .await
+        .unwrap();
 
     let addr = contract.address();
 
     println!("contract address {}", addr);
 
-    let contract = Worldplace::new(addr, client.clone());
+    // let contract = Worldplace::new(addr, client.clone());
+
+    // contract.set_pixel()
 
     Ok(())
 }
