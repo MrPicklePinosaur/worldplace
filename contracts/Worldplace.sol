@@ -3,14 +3,14 @@ pragma solidity ^0.8.9;
 contract Worldplace {
 
   struct Pos {
-    uint x;
-    uint y;
+    uint32 x;
+    uint32 y;
   }
 
   struct Color {
-    uint r;
-    uint g;
-    uint b;
+    uint8 r;
+    uint8 g;
+    uint8 b;
   }
 
   uint WIDTH;

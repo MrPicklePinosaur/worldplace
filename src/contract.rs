@@ -14,7 +14,9 @@ use log::{error, info};
 
 abigen!(Worldplace, "./abi/Worldplace.json");
 
-pub async fn deploy() -> anyhow::Result<()> {
+type Contract = Worldplace<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>;
+
+pub async fn deploy() -> anyhow::Result<Contract> {
     // project setup
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let paths = ProjectPathsConfig::builder()
@@ -40,7 +42,7 @@ pub async fn deploy() -> anyhow::Result<()> {
     let wallet: LocalWallet = anvil.keys()[0].clone().into();
 
     // connect to anvil network
-    let provider = Provider::<Http>::try_from(anvil.endpoint())
+    let provider = Provider::<Http>::try_from(format!("http://localhost:{}", 8545))
         .unwrap()
         .interval(Duration::from_millis(10u64));
     let client = SignerMiddleware::new(provider, wallet.with_chain_id(anvil.chain_id()));
@@ -58,11 +60,9 @@ pub async fn deploy() -> anyhow::Result<()> {
 
     println!("contract address {}", addr);
 
-    // let contract = Worldplace::new(addr, client.clone());
+    let contract = Worldplace::new(addr, client.clone());
 
-    // contract.set_pixel()
-
-    Ok(())
+    Ok(contract)
 }
 
 #[cfg(test)]
