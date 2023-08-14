@@ -17,7 +17,7 @@ Install git hooks
 just devsetup
 ```
 
-If doing smart contract development, you can run a local node
+If doing smart contract development, you can run a local node using [anvil](https://github.com/foundry-rs/foundry/tree/master/crates/anvil)
 ```sh
 anvil
 ```

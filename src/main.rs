@@ -1,6 +1,7 @@
 mod contract;
 mod ether;
 
-fn main() {
-    println!("こんにちは世界！");
+#[tokio::main]
+async fn main() {
+    contract::deploy().await.unwrap();
 }
