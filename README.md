@@ -9,3 +9,15 @@
 </div>
 
 r/place on the blockchain
+
+## Setting up for development
+
+Install git hooks
+```sh
+just devsetup
+```
+
+If doing smart contract development, you can run a local node
+```sh
+anvil
+```
