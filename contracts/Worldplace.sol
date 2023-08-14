@@ -7,22 +7,31 @@ contract Worldplace {
     uint y;
   }
 
-  struct Color {
-    uint r;
-    uint g;
-    uint b;
+  function encodeColor(uint8 r, uint8 g, uint8 b, uint8 a) public pure returns (uint32) {
+        uint32 color = (uint32(r) << 24) | (uint32(g) << 16) | (uint32(b) << 8) | uint32(a);
+        return color;
   }
+  function decodeColor(uint32 color) public pure returns (uint8, uint8, uint8, uint8) {
+        uint8 r = uint8((color >> 24) & 0xFF);
+        uint8 g = uint8((color >> 16) & 0xFF);
+        uint8 b = uint8((color >> 8) & 0xFF);
+        uint8 a = uint8(color & 0xFF);
+        return (r, g, b, a);
+  }
+  mapping(address => uint256) public userCooldowns; 
 
   uint WIDTH;
   uint HEIGHT;
+  uint COOLDOWN;
 
-  mapping(bytes32 => Color) internal grid;
+  mapping(bytes32 => uint32) internal grid;
 
-  constructor(uint width, uint height) {
+  constructor(uint width, uint height, uint cooldown) {
     require(width > 0);
     require(height > 0);
     WIDTH = width;
     HEIGHT = height;
+    COOLDOWN = cooldown;
   }
 
   function _bounds_check(Pos memory pos) internal view returns(bool) {
@@ -36,16 +45,20 @@ contract Worldplace {
   }
   */
 
-  function set_pixel(Pos calldata pos, Color calldata color) public {
+  modifier canPlace() {
+        require(block.timestamp - userCooldowns[msg.sender] >= COOLDOWN, "Cooldown period not passed");
+        _;
+  }
+  function set_pixel(Pos calldata pos, uint8 r, uint8 g, uint8 b, uint8 a) public canPlace{
     require(_bounds_check(pos));
     // TODO validate color too
-    grid[keccak256(abi.encode(pos))] = color;
+    grid[keccak256(abi.encode(pos))] = encodeColor(r,g,b,a);
   }
 
-  function get_pixel(Pos calldata pos) public view returns(uint, uint, uint) {
+  function get_pixel(Pos calldata pos) public view returns(uint8, uint8, uint8, uint8) {
     require(_bounds_check(pos));
-    Color memory c = grid[keccak256(abi.encode(pos))];
-    return (c.r, c.g, c.b);
+    uint32 c = grid[keccak256(abi.encode(pos))];
+    return decodeColor(c);
   }
 
   // TODO

@@ -42,7 +42,12 @@ pub async fn deploy() -> anyhow::Result<()> {
     let client = Arc::new(client);
 
     let factory = ContractFactory::new(abi.unwrap(), bytecode.unwrap(), client.clone());
-    let contract = factory.deploy(0u64).unwrap().send().await.unwrap();
+    let contract = factory
+        .deploy((U256::from(5), U256::from(5)))
+        .unwrap()
+        .send()
+        .await
+        .unwrap();
 
     let addr = contract.address();
 
