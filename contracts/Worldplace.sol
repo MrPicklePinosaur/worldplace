@@ -3,13 +3,15 @@ pragma solidity ^0.8.9;
 contract Worldplace {
 
   struct Pos {
-    uint x;
-    uint y;
+    uint32 x;
+    uint32 y;
   }
+
 
   function encodeColor(uint8 r, uint8 g, uint8 b, uint8 a) public pure returns (uint32) {
         uint32 color = (uint32(r) << 24) | (uint32(g) << 16) | (uint32(b) << 8) | uint32(a);
         return color;
+
   }
   function decodeColor(uint32 color) public pure returns (uint8, uint8, uint8, uint8) {
         uint8 r = uint8((color >> 24) & 0xFF);

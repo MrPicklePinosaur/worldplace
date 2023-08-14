@@ -1,15 +1,22 @@
 use std::{path::PathBuf, sync::Arc, time::Duration};
 
 use ethers::{
-    prelude::*,
+    contract::{abigen, ContractFactory},
+    core::utils::Anvil,
+    middleware::SignerMiddleware,
+    prelude::k256::{ecdsa::SigningKey, elliptic_curve::consts::U2, Secp256k1},
+    providers::{Http, Provider},
+    signers::{LocalWallet, Signer, Wallet},
     solc::{Artifact, Project, ProjectPathsConfig},
-    utils::Anvil,
+    types::U256,
 };
 use log::{error, info};
 
 abigen!(Worldplace, "./abi/Worldplace.json");
 
-pub async fn deploy() -> anyhow::Result<()> {
+type Contract = Worldplace<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>;
+
+pub async fn deploy() -> anyhow::Result<Contract> {
     // project setup
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let paths = ProjectPathsConfig::builder()
@@ -35,7 +42,7 @@ pub async fn deploy() -> anyhow::Result<()> {
     let wallet: LocalWallet = anvil.keys()[0].clone().into();
 
     // connect to anvil network
-    let provider = Provider::<Http>::try_from(anvil.endpoint())
+    let provider = Provider::<Http>::try_from(format!("http://localhost:{}", 8545))
         .unwrap()
         .interval(Duration::from_millis(10u64));
     let client = SignerMiddleware::new(provider, wallet.with_chain_id(anvil.chain_id()));
@@ -43,7 +50,8 @@ pub async fn deploy() -> anyhow::Result<()> {
 
     let factory = ContractFactory::new(abi.unwrap(), bytecode.unwrap(), client.clone());
     let contract = factory
-        .deploy((U256::from(5), U256::from(5)))
+
+        .deploy((U256::from(5), U256::from(5), U256::from(10)))
         .unwrap()
         .send()
         .await
@@ -55,7 +63,7 @@ pub async fn deploy() -> anyhow::Result<()> {
 
     let contract = Worldplace::new(addr, client.clone());
 
-    Ok(())
+    Ok(contract)
 }
 
 #[cfg(test)]
