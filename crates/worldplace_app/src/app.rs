@@ -1,5 +1,7 @@
 use std::time::Duration;
 
+use itertools::Itertools;
+use stylist::{css, yew::styled_component, Style};
 use wasm_bindgen::prelude::*;
 use web3::transports::eip_1193;
 use yew::prelude::*;
@@ -31,11 +33,43 @@ fn contract_init() {
     });
 }
 
-#[function_component]
+const BLACK: Color = Color {
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 255,
+};
+
+#[derive(Clone)]
+struct Color {
+    r: usize,
+    g: usize,
+    b: usize,
+    a: usize,
+}
+
+//#[function_component]
+#[styled_component]
 pub fn App() -> Html {
+    let cell_style = css! {
+        r#"
+            background-color: black;
+            width: 2rem;
+            height: 2rem;
+            margin: 0.1rem;
+            transition: all .1s ease-out;
+        "#
+    };
+
+    let cellrow_style = css! {
+        r#"
+            display: flex;
+            flex-direction: row;
+        "#
+    };
+
     let counter = use_state(|| 0);
     let onclick = {
-        log("hello world");
         contract_init();
 
         wasm_bindgen_futures::spawn_local(async move {
@@ -52,8 +86,33 @@ pub fn App() -> Html {
         }
     };
 
+    let width = 5;
+    let heigth = 5;
+    let cells: Vec<Color> = vec![BLACK; 25];
+    let cells_dom = cells
+        .iter()
+        .enumerate()
+        .chunks(width)
+        .into_iter()
+        .map(|chunk| {
+            let row = chunk
+                .map(|(id, cell)| {
+                    html! {
+                        <div key={id} class={cell_style.clone()}></div>
+                    }
+                })
+                .collect::<Html>();
+
+            html! {
+                <div class={cellrow_style.clone()}>{row}</div>
+            }
+        })
+        .collect::<Html>();
+
     html! {
         <div>
+            <h1>{"worldplace.io"}</h1>
+            <div>{cells_dom}</div>
             <button {onclick}>{ "+1" }</button>
             <p>{ *counter }</p>
         </div>
