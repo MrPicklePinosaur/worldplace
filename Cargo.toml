@@ -1,24 +1,4 @@
-[package]
-name = "worldplace"
-version = "0.1.0"
-edition = "2021"
-license = "MIT OR Apache-2.0"
-authors = ["Daniel Liu <mr.picklepinosaur@gmail.com>"]
-description = "r/place on the blockchain"
-repository = "https://github.com/MrPicklePinosaur/worldplace"
-
-[features]
-
-[dependencies]
-ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
-tokio = { version = "1.0", default-features = false, features = ["macros", "rt-multi-thread"] }
-
-serde_json = { version = "1.0" }
-
-anyhow = { version = "1" }
-env_logger = { version = "0.9" }
-log = { version = "0.4" }
-
-[build-dependencies]
-ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
-serde_json = { version = "1.0" }
+[workspace]
+members = [
+    "crates/*"
+]

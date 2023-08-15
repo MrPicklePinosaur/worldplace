@@ -2,7 +2,7 @@ use std::{path::PathBuf, sync::Arc, time::Duration};
 
 use ethers::{
     contract::{abigen, ContractFactory},
-    core::utils::Anvil,
+    //core::utils::Anvil,
     middleware::SignerMiddleware,
     prelude::k256::{ecdsa::SigningKey, elliptic_curve::consts::U2, Secp256k1},
     providers::{Http, Provider},
@@ -10,12 +10,11 @@ use ethers::{
     solc::{Artifact, Project, ProjectPathsConfig},
     types::U256,
 };
-use log::{error, info};
-
-abigen!(Worldplace, "./abi/Worldplace.json");
+use worldplace_abi::Worldplace;
 
 type Contract = Worldplace<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>;
 
+/*
 pub async fn deploy() -> anyhow::Result<Contract> {
     // project setup
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -85,3 +84,4 @@ mod tests {
         deploy().await.unwrap();
     }
 }
+*/

@@ -1,0 +1,24 @@
+[package]
+name = "worldplace_app"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Daniel Liu <mr.picklepinosaur@gmail.com>"]
+description = "r/place on the blockchain"
+repository = "https://github.com/MrPicklePinosaur/worldplace"
+
+[dependencies]
+yew = { version = "0.20.0", features = ["csr"] }
+ethers = { version = "2.0.6", default-features = false, features = ["ethers-solc"] }
+
+serde_json = { version = "1.0" }
+
+anyhow = { version = "1" }
+env_logger = { version = "0.9" }
+log = { version = "0.4" }
+
+wasm-bindgen = { version = "0.2.87", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4.37"
+wasm-logger = "0.2.0"
+web-sys = "0.3.64"
+js-sys = "0.3.64"

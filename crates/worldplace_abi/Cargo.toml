@@ -1,0 +1,15 @@
+[package]
+name = "worldplace_abi"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Daniel Liu <mr.picklepinosaur@gmail.com>"]
+description = "r/place on the blockchain"
+repository = "https://github.com/MrPicklePinosaur/worldplace"
+
+[dependencies]
+ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
+
+[build-dependencies]
+ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
+serde_json = { version = "1.0" }
