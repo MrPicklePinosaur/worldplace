@@ -53,8 +53,7 @@ async fn deploy_contract(transport: impl web3::Transport) -> web3::contract::Res
 
     // Deploying a contract
     let contract = Contract::deploy(web3.eth(), ABI)?
-        .confirmations(1)
-        .poll_interval(std::time::Duration::from_secs(5))
+        .confirmations(0)
         .options(Options::with(|opt| opt.gas = Some(3_000_000.into())))
         .execute(
             bytecode,
@@ -63,7 +62,7 @@ async fn deploy_contract(transport: impl web3::Transport) -> web3::contract::Res
         )
         .await?;
 
-    println!("Deployed at: {}", contract.address());
+    println!("Deployed at: {:?}", contract.address());
 
     Ok(())
 }

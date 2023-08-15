@@ -4037,7 +4037,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "env_logger",
- "ethers",
+ "hex",
  "js-sys",
  "log",
  "serde_json",
@@ -4046,6 +4046,7 @@ dependencies = [
  "wasm-logger",
  "web-sys",
  "web3 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "worldplace_abi",
  "yew",
  "yew-ethereum-provider",
 ]
