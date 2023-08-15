@@ -37,7 +37,7 @@ const BLACK: Color = Color {
     r: 0,
     g: 0,
     b: 0,
-    a: 255,
+    a: 1,
 };
 
 #[derive(Clone)]
@@ -53,11 +53,14 @@ struct Color {
 pub fn App() -> Html {
     let cell_style = css! {
         r#"
-            background-color: black;
             width: 2rem;
             height: 2rem;
             margin: 0.1rem;
             transition: all .1s ease-out;
+
+            :hover {
+                transform: scale(1.1);
+            }
         "#
     };
 
@@ -68,7 +71,17 @@ pub fn App() -> Html {
         "#
     };
 
-    let counter = use_state(|| 0);
+    let grid_style = css! {
+        r#"
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+        "#
+    };
+
     let onclick = {
         contract_init();
 
@@ -79,11 +92,7 @@ pub fn App() -> Html {
             )
             .await;
         });
-        let counter = counter.clone();
-        move |_| {
-            let value = *counter + 1;
-            counter.set(value);
-        }
+        move |_| {}
     };
 
     let width = 5;
@@ -97,8 +106,12 @@ pub fn App() -> Html {
         .map(|chunk| {
             let row = chunk
                 .map(|(id, cell)| {
+                    let cell_color = format!(
+                        "background-color: rgba({}, {}, {}, {})",
+                        cell.r, cell.g, cell.b, cell.a
+                    );
                     html! {
-                        <div key={id} class={cell_style.clone()}></div>
+                        <div key={id} class={cell_style.clone()} style={cell_color}></div>
                     }
                 })
                 .collect::<Html>();
@@ -112,9 +125,8 @@ pub fn App() -> Html {
     html! {
         <div>
             <h1>{"worldplace.io"}</h1>
-            <div>{cells_dom}</div>
-            <button {onclick}>{ "+1" }</button>
-            <p>{ *counter }</p>
+            <div class={grid_style.clone()}>{cells_dom}</div>
+            <button {onclick}>{ "click" }</button>
         </div>
     }
 }
