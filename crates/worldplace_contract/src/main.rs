@@ -1,9 +1,10 @@
 mod contract;
 
-fn main() {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let contract = contract::deploy().await.unwrap();
 
     /*
-    let contract = contract::deploy().await.unwrap();
     contract
         .set_pixel(Pos { 0: 2, 1: 2 }, 0, 255, 255, 255)
         .send()
@@ -27,4 +28,5 @@ fn main() {
         .await?;
     println!("{:?}", contract.get_pixel(Pos { 0: 2, 1: 2 }).call().await?);
     */
+    Ok(())
 }
