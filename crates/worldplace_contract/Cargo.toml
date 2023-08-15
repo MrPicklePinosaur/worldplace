@@ -8,6 +8,10 @@ description = "r/place on the blockchain"
 repository = "https://github.com/MrPicklePinosaur/worldplace"
 
 [dependencies]
+anyhow = "1.0.72"
 ethers = { version = "2.0.6", default-features = false, features = ["ethers-solc"] }
+k256 = "0.13.1"
+tokio = {version="1.31.0", features=["full"]}
+
 
 worldplace_abi = { path = "../worldplace_abi" }
