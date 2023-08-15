@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use wasm_bindgen::prelude::*;
+use web3::transports::eip_1193;
 use yew::prelude::*;
 use yew_ethereum_provider::{
     chain, AccountLabel, ConnectButton, EthereumContextProvider, SwitchNetworkButton,
@@ -30,14 +31,6 @@ fn contract_init() {
             log(&format!("Balance of {:?}: {}", account, balance));
         }
     });
-}
-
-async fn deploy_contract() -> web3::contract::Result<()> {
-    let transport = web3::transports::Http::new("http://localhost:8545")?;
-    let web3 = web3::Web3::new(transport);
-    let accounts = web3.eth().accounts().await?;
-
-    Ok(())
 }
 
 #[function_component]

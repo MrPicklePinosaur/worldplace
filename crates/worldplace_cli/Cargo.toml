@@ -1,0 +1,13 @@
+[package]
+name = "worldplace_cli"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Daniel Liu <mr.picklepinosaur@gmail.com>"]
+description = "r/place on the blockchain"
+repository = "https://github.com/MrPicklePinosaur/worldplace"
+
+[dependencies]
+web3 = { version = "0.19", default-features = false, features = ["wasm", "eip-1193", "http"] }
+clap = { version = "4.3", features = ["derive"] }
+tokio = {version="1.31.0", features=["full"]}
