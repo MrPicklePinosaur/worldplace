@@ -22,25 +22,23 @@ contract Worldplace {
   }
   mapping(address => uint256) public userCooldowns; 
 
-  uint WIDTH;
-  uint HEIGHT;
-  uint COOLDOWN;
+  uint32 public width;
+  uint32 public height;
+  uint32 public cooldown;
 
   mapping(bytes32 => uint32) internal grid;
 
-  constructor(uint width, uint height, uint cooldown) {
-    require(width > 0);
-    require(height > 0);
-    WIDTH = width;
-    HEIGHT = height;
-    COOLDOWN = cooldown;
+  constructor(uint32 _width, uint32 _height, uint32 _cooldown) {
+    require(_width > 0);
+    require(_height > 0);
+    width = _width;
+    height = _height;
+    cooldown= _cooldown;
+
   }
 
   function _bounds_check(Pos memory pos) internal view returns(bool) {
-    return (0 <= pos.x && pos.x < WIDTH && 0 <= pos.y && pos.y < HEIGHT);
-  }
-  function get_cooldown() external view returns(uint){
-    return COOLDOWN;
+    return (0 <= pos.x && pos.x < width && 0 <= pos.y && pos.y < height);
   }
 
   // TODO
@@ -51,7 +49,7 @@ contract Worldplace {
   */
 
   modifier canPlace() {
-        require(block.timestamp - userCooldowns[msg.sender] >= COOLDOWN, "Cooldown period not passed");
+        require(block.timestamp - userCooldowns[msg.sender] >= cooldown, "Cooldown period not passed");
         _;
   }
   function set_pixel(Pos calldata pos, uint8 r, uint8 g, uint8 b, uint8 a) public canPlace{
@@ -61,10 +59,29 @@ contract Worldplace {
     grid[keccak256(abi.encode(pos))] = encodeColor(r,g,b,a);
   }
 
-  function get_pixel(Pos calldata pos) public view returns(uint8, uint8, uint8, uint8) {
+  function get_pixel(Pos memory pos) public view returns(uint8, uint8, uint8, uint8) {
     require(_bounds_check(pos));
     uint32 c = grid[keccak256(abi.encode(pos))];
     return decodeColor(c);
+  }
+  function get_place() external view returns(uint8[][][] memory){
+    uint8[][][] memory array = new uint8[][][](height);
+    for (uint32 y = 0; y < height; y++) {
+      array[y] = new uint8[][](width);
+      for (uint32 x = 0; x< width; x++) {
+        Pos memory pos = Pos(x,y);
+        (uint8 r,uint8 g,uint8 b,uint8 a) = get_pixel(pos);
+        array[y][x] = new uint8[](4);
+        array[y][x][0] = r;
+        array[y][x][1] = g;
+        array[y][x][2] = b;
+        array[y][x][3] = a;
+
+      }
+    }
+    return array;
+
+
   }
 
   // TODO
