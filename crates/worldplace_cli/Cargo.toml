@@ -13,3 +13,4 @@ clap = { version = "4.3", features = ["derive"] }
 tokio = {version="1.31.0", features=["full"]}
 
 worldplace_abi = { path = "../worldplace_abi" }
+worldplace_contract = {path="../worldplace_contract"}

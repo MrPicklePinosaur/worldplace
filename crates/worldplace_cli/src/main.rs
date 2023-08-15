@@ -6,6 +6,7 @@ use web3::{
     Web3,
 };
 use worldplace_abi::{ABI, BIN};
+use worldplace_contract;
 
 #[derive(Parser)]
 struct Cli {
@@ -20,8 +21,9 @@ async fn main() {
         "anvil" => {
             deploy_contract(anvil_transport()).await.unwrap();
         },
-        "metamask" => {
-            deploy_contract(metamask_transport()).await.unwrap();
+        "contract" => {
+            let contract = worldplace_contract::contract::deploy().await.unwrap();
+            println!("contract address is {:?}", contract);
         },
         _ => {},
     };

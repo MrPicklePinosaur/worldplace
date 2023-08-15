@@ -7,13 +7,16 @@ use ethers::{
     providers::{Http, Provider},
     signers::{LocalWallet, Signer, Wallet},
     solc::{Artifact, Project, ProjectPathsConfig},
-    types::{Chain, U256},
+    types::{Chain, H160, U256},
 };
-use worldplace_abi::Worldplace;
 
-type Contract = Worldplace<SignerMiddleware<Provider<Http>, Wallet<k256::ecdsa::SigningKey>>>;
+use crate::contract;
 
-pub async fn deploy() -> anyhow::Result<Contract> {
+type Contract = SignerMiddleware<Provider<Http>, Wallet<k256::ecdsa::SigningKey>>;
+
+pub async fn deploy() -> anyhow::Result<H160> {
+    dotenvy::dotenv().ok();
+
     // project setup
     let root = PathBuf::from("/Users/nithin/RustProjects/worldplace/crates");
     let parent = root.parent().unwrap();
@@ -52,13 +55,7 @@ pub async fn deploy() -> anyhow::Result<Contract> {
         .await
         .unwrap();
 
-    let addr = contract.address();
-
-    println!("contract address {:?}", addr);
-
-    let contract = Worldplace::new(addr, client.clone());
-
-    Ok(contract)
+    Ok(contract.address())
 }
 
 // #[cfg(test)]
