@@ -4057,6 +4057,7 @@ dependencies = [
  "clap",
  "tokio",
  "web3 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "worldplace_abi",
 ]
 
 [[package]]

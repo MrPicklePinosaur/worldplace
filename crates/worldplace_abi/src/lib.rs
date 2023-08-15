@@ -6,6 +6,6 @@ pub mod contract {
 
     pub static BIN: &'static str =
         include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/abi/Worldplace.bin"));
-    pub static ABI: &'static str =
-        include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/abi/Worldplace.abi"));
+    pub static ABI: &[u8] =
+        include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/abi/Worldplace.abi"));
 }

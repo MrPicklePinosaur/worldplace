@@ -1,4 +1,11 @@
 use clap::Parser;
+use web3::{
+    contract::{Contract, Options},
+    transports::{eip_1193::Eip1193, Http},
+    types::U256,
+    Web3,
+};
+use worldplace_abi::{ABI, BIN};
 
 #[derive(Parser)]
 struct Cli {
@@ -21,11 +28,11 @@ async fn main() {
 }
 
 fn anvil_transport() -> impl web3::Transport {
-    web3::transports::Http::new("http://localhost:8545").unwrap()
+    Http::new("http://localhost:8545").unwrap()
 }
 
 fn metamask_transport() -> impl web3::Transport {
-    web3::transports::eip_1193::Eip1193::new(
+    Eip1193::new(
         web3::transports::eip_1193::Provider::default()
             .unwrap()
             .unwrap(),
@@ -33,20 +40,28 @@ fn metamask_transport() -> impl web3::Transport {
 }
 
 async fn deploy_contract(transport: impl web3::Transport) -> web3::contract::Result<()> {
-    let web3 = web3::Web3::new(transport);
+    let web3 = Web3::new(transport);
     let accounts = web3.eth().accounts().await?;
 
-    /*
-    let bytecode = include_str!("./res/SimpleStorage.bin");
+    let bytecode = BIN;
+
+    let balance = web3.eth().balance(accounts[0], None).await?;
+
+    println!("Balance: {}", balance);
 
     // Deploying a contract
-    let contract = Contract::deploy(web3.eth(), include_bytes!("./res/SimpleStorage.abi"))?
+    let contract = Contract::deploy(web3.eth(), ABI)?
         .confirmations(1)
-        .poll_interval(time::Duration::from_secs(10))
+        .poll_interval(std::time::Duration::from_secs(5))
         .options(Options::with(|opt| opt.gas = Some(3_000_000.into())))
-        .execute(bytecode, (), accounts[0])
+        .execute(
+            bytecode,
+            (U256::from(10), U256::from(10), U256::from(10)),
+            accounts[0],
+        )
         .await?;
-    */
+
+    println!("Deployed at: {}", contract.address());
 
     Ok(())
 }
