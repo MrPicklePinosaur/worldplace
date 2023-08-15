@@ -3353,7 +3353,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "worldplace"
+name = "worldplace_abi"
+version = "0.1.0"
+dependencies = [
+ "ethers",
+ "serde_json",
+]
+
+[[package]]
+name = "worldplace_app"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -3367,6 +3375,14 @@ dependencies = [
  "wasm-logger",
  "web-sys",
  "yew",
+]
+
+[[package]]
+name = "worldplace_contract"
+version = "0.1.0"
+dependencies = [
+ "ethers",
+ "worldplace_abi",
 ]
 
 [[package]]

@@ -1,11 +1,8 @@
 
-default: debug
-
-debug:
-    cargo run
+default: serve
 
 serve:
-    trunk serve --release
+    cd crates/worldplace_app && trunk serve --release
 
 devsetup:
     cp dev/hooks/* .git/hooks
