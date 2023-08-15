@@ -4030,10 +4030,6 @@ dependencies = [
 [[package]]
 name = "worldplace_abi"
 version = "0.1.0"
-dependencies = [
- "ethers",
- "serde_json",
-]
 
 [[package]]
 name = "worldplace_app"

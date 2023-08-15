@@ -2,14 +2,21 @@ use std::{
     fs::{File, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
+    process::Command,
 };
 
-use ethers::{
-    contract::Abigen,
-    solc::{CompilerInput, Solc},
-};
+// use ethers::{
+//     contract::Abigen,
+//     solc::{CompilerInput, Solc},
+// };
 
 pub fn main() {
+    let mut handle = Command::new("solc")
+        .args(vec!["-o", "abi", "--bin", "--abi", "contracts/*.sol"])
+        .spawn()
+        .unwrap();
+
+    handle.wait().unwrap();
 
     // compile_contract(
     //     "Worldplace",
@@ -18,6 +25,7 @@ pub fn main() {
     // );
 }
 
+/*
 pub fn compile_contract(contract_name: &str, contract_path: &Path, output_path: &Path) {
     let solc = Solc::default();
     let output = solc.compile_source(contract_path).unwrap();
@@ -48,3 +56,4 @@ pub fn compile_contract(contract_name: &str, contract_path: &Path, output_path: 
         .unwrap();
     file.write_all(abi_spec.to_string().as_bytes()).unwrap();
 }
+*/

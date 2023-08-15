@@ -8,8 +8,8 @@ description = "r/place on the blockchain"
 repository = "https://github.com/MrPicklePinosaur/worldplace"
 
 [dependencies]
-ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
+# ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
 
 [build-dependencies]
-ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
-serde_json = { version = "1.0" }
+# ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
+# serde_json = { version = "1.0" }
