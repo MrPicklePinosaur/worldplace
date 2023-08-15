@@ -10,6 +10,7 @@ repository = "https://github.com/MrPicklePinosaur/worldplace"
 [dependencies]
 yew = { version = "0.20.0", features = ["csr"] }
 yew-ethereum-provider = { git = "https://github.com/monomadic/yew-ethereum-provider" }
+stylist = { version = "0.11", features = ["yew_integration"] }
 # ethers = { version = "2.0.6", default-features = false, features = ["ethers-solc"] }
 web3 = { version = "0.19", default-features = false, features = ["wasm", "eip-1193", "http"] }
 
@@ -18,6 +19,7 @@ serde_json = { version = "1.0" }
 anyhow = { version = "1" }
 env_logger = { version = "0.9" }
 log = { version = "0.4" }
+itertools = { version = "0.11" }
 
 wasm-bindgen = { version = "0.2.87", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.37"
