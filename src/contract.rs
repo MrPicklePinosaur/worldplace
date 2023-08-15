@@ -50,8 +50,7 @@ pub async fn deploy() -> anyhow::Result<Contract> {
 
     let factory = ContractFactory::new(abi.unwrap(), bytecode.unwrap(), client.clone());
     let contract = factory
-
-        .deploy((U256::from(5), U256::from(5), U256::from(10)))
+        .deploy((U256::from(5), U256::from(5), U256::from(5)))
         .unwrap()
         .send()
         .await

@@ -54,6 +54,7 @@ contract Worldplace {
   function set_pixel(Pos calldata pos, uint8 r, uint8 g, uint8 b, uint8 a) public canPlace{
     require(_bounds_check(pos));
     // TODO validate color too
+    userCooldowns[msg.sender] = block.timestamp;
     grid[keccak256(abi.encode(pos))] = encodeColor(r,g,b,a);
   }
 
