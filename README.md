@@ -17,6 +17,12 @@ Install git hooks
 just devsetup
 ```
 
+Install trunk, which is used to serve our web application
+```sh
+rustup target add wasm32-unknown-unknown
+cargo install --locked trunk wasm-bindgen-cli
+```
+
 If doing smart contract development, you can run a local node using [anvil](https://github.com/foundry-rs/foundry/tree/master/crates/anvil)
 ```sh
 anvil

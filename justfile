@@ -4,6 +4,9 @@ default: debug
 debug:
     cargo run
 
+serve:
+    trunk serve --release
+
 devsetup:
     cp dev/hooks/* .git/hooks
 

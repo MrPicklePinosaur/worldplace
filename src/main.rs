@@ -1,10 +1,11 @@
 use contract::{Color, Pos};
 
+mod app;
 mod contract;
 mod ether;
 
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
+fn main() -> anyhow::Result<()> {
+    /*
     let contract = contract::deploy().await.unwrap();
 
     contract
@@ -15,6 +16,8 @@ async fn main() -> anyhow::Result<()> {
 
     let pixel = contract.get_pixel(Pos { 0: 1, 1 }).call().await?;
     println!("{:?}", pixel);
+    */
+    yew::Renderer::<app::App>::new().render();
 
     Ok(())
 }

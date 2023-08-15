@@ -10,14 +10,21 @@ repository = "https://github.com/MrPicklePinosaur/worldplace"
 [features]
 
 [dependencies]
-ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
-tokio = { version = "1.0", default-features = false, features = ["macros", "rt-multi-thread"] }
+ethers = { version = "2.0.6", default-features = false, features = ["ethers-solc"] }
+
+yew = { version = "0.20.0", features = ["csr"] }
 
 serde_json = { version = "1.0" }
 
 anyhow = { version = "1" }
 env_logger = { version = "0.9" }
 log = { version = "0.4" }
+
+wasm-bindgen = { version = "0.2.87", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4.37"
+wasm-logger = "0.2.0"
+web-sys = "0.3.64"
+js-sys = "0.3.64"
 
 [build-dependencies]
 ethers = { version = "2.0", default-features = false, features = ["ethers-solc"] }
