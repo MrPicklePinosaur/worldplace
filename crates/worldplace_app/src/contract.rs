@@ -23,7 +23,10 @@ pub fn moonbase_transport() -> impl web3::Transport {
     Http::new("https://rpc.api.moonbase.moonbeam.network").unwrap()
 }
 
-pub async fn get_contract(transport: impl web3::Transport, contract_addr: &str) {
+pub async fn get_contract<T: web3::Transport + 'static>(
+    transport: T,
+    contract_addr: &str,
+) -> Contract<T> {
     let web3 = web3::Web3::new(transport);
 
     let addr = hex::decode(contract_addr).unwrap();
@@ -33,8 +36,10 @@ pub async fn get_contract(transport: impl web3::Transport, contract_addr: &str) 
 
     log(&format!("addr {:?}", contract.address()));
 
-    let res = contract.query("get_cooldown", (), None, Options::default(), None);
-    let cooldown: U256 = res.await.unwrap();
+    // let res = contract.query("get_cooldown", (), None, Options::default(), None);
+    // let cooldown: U256 = res.await.unwrap();
 
-    log(&format!("cooldown {:?}", cooldown));
+    // log(&format!("cooldown {:?}", cooldown));
+
+    contract
 }

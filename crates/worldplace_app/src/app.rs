@@ -3,7 +3,7 @@ use std::time::Duration;
 use itertools::Itertools;
 use stylist::{css, yew::styled_component, Style};
 use wasm_bindgen::prelude::*;
-use web3::transports::eip_1193;
+use web3::{contract::Options, transports::eip_1193};
 use yew::prelude::*;
 use yew_ethereum_provider::{
     chain, AccountLabel, ConnectButton, EthereumContextProvider, SwitchNetworkButton,
@@ -41,11 +41,18 @@ const BLACK: Color = Color {
 };
 
 #[derive(Clone)]
-struct Color {
-    r: usize,
-    g: usize,
-    b: usize,
-    a: usize,
+pub struct Color {
+    pub r: u32,
+    pub g: u32,
+    pub b: u32,
+    pub a: u32,
+}
+
+#[derive(Clone)]
+pub struct Grid {
+    pub width: usize,
+    pub height: usize,
+    pub contents: Vec<Color>,
 }
 
 //#[function_component]
@@ -95,37 +102,76 @@ pub fn App() -> Html {
         move |_| {}
     };
 
-    let width = 5;
-    let heigth = 5;
-    let cells: Vec<Color> = vec![BLACK; 25];
-    let cells_dom = cells
-        .iter()
-        .enumerate()
-        .chunks(width)
-        .into_iter()
-        .map(|chunk| {
-            let row = chunk
-                .map(|(id, cell)| {
-                    let cell_color = format!(
-                        "background-color: rgba({}, {}, {}, {})",
-                        cell.r, cell.g, cell.b, cell.a
-                    );
-                    html! {
-                        <div key={id} class={cell_style.clone()} style={cell_color}></div>
-                    }
-                })
-                .collect::<Html>();
+    let grid = use_state(|| None::<Grid>);
 
-            html! {
-                <div class={cellrow_style.clone()}>{row}</div>
-            }
-        })
-        .collect::<Html>();
+    /*
+    wasm_bindgen_futures::spawn_local(async move {
+        let contract = get_contract(
+            moonbase_transport(),
+            "58fb45eb500c0e6e5b6b87e2cb5b079e81ce32fb",
+        )
+        .await;
+
+        let res = contract.query("get_place", (), None, Options::default(), None);
+        let grid_contents: Vec<Vec<u32>> = res.await.unwrap();
+
+        let parsed_grid = Grid {
+            width: 10,
+            height: 10,
+            contents: grid_contents.iter().map(|cell|
+               Color {
+                   r: cell[0],
+                   g: cell[1],
+                   b: cell[2],
+                   a: cell[3],
+               }
+            ).collect::<Vec<_>>()
+        };
+
+        grid.clone().set(Some(parsed_grid));
+
+    });
+    */
+
+    let render_grid = |grid: &Grid| -> Html {
+        let grid_html = grid
+            .contents
+            .iter()
+            .enumerate()
+            .chunks(grid.width)
+            .into_iter()
+            .map(|chunk| {
+                let row = chunk
+                    .map(|(id, cell)| {
+                        let cell_color = format!(
+                            "background-color: rgba({}, {}, {}, {})",
+                            cell.r, cell.g, cell.b, cell.a
+                        );
+                        html! {
+                            <div key={id} class={cell_style.clone()} style={cell_color}></div>
+                        }
+                    })
+                    .collect::<Html>();
+
+                html! {
+                    <div class={cellrow_style.clone()}>{row}</div>
+                }
+            })
+            .collect::<Html>();
+
+        html! {
+            <div class={grid_style.clone()}>{grid_html}</div>
+        }
+    };
+    let grid_dom: Html = match *grid.clone() {
+        Some(ref grid) => render_grid(grid),
+        None => html! {<div>{"loading..."}</div>},
+    };
 
     html! {
         <div>
             <h1>{"worldplace.io"}</h1>
-            <div class={grid_style.clone()}>{cells_dom}</div>
+            {grid_dom}
             <button {onclick}>{ "click" }</button>
         </div>
     }
