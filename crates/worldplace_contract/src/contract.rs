@@ -15,7 +15,7 @@ type Contract = Worldplace<SignerMiddleware<Provider<Http>, Wallet<k256::ecdsa::
 
 pub async fn deploy() -> anyhow::Result<Contract> {
     // project setup
-    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let root = PathBuf::from("/Users/nithin/RustProjects/worldplace/crates");
     let parent = root.parent().unwrap();
     println!("{:?}", parent);
     let paths = ProjectPathsConfig::builder()
@@ -37,7 +37,8 @@ pub async fn deploy() -> anyhow::Result<Contract> {
     let (abi, bytecode, _) = contract.into_parts();
 
     let provider = Provider::<Http>::try_from("https://rpc.api.moonbase.moonbeam.network")?;
-    let wallet: LocalWallet = "9815b5ebf36e8c6a21716e08f54ba11e164f64e8d417a6d937181f0b51ef4427"
+    let wallet: LocalWallet = std::env::var("SECRET_KEY")
+        .unwrap()
         .parse::<LocalWallet>()?
         .with_chain_id(Chain::Moonbase);
     let client = SignerMiddleware::new(provider.clone(), wallet.clone());
@@ -53,7 +54,7 @@ pub async fn deploy() -> anyhow::Result<Contract> {
 
     let addr = contract.address();
 
-    println!("contract address {}", addr);
+    println!("contract address {:?}", addr);
 
     let contract = Worldplace::new(addr, client.clone());
 
