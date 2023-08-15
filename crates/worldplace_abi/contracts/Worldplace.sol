@@ -39,6 +39,9 @@ contract Worldplace {
   function _bounds_check(Pos memory pos) internal view returns(bool) {
     return (0 <= pos.x && pos.x < WIDTH && 0 <= pos.y && pos.y < HEIGHT);
   }
+  function get_cooldown() external view returns(uint){
+    return COOLDOWN;
+  }
 
   // TODO
   /*
