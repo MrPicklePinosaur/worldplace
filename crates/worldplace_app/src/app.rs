@@ -7,12 +7,14 @@ use yew_ethereum_provider::{
     chain, AccountLabel, ConnectButton, EthereumContextProvider, SwitchNetworkButton,
 };
 
+use crate::contract::get_contract;
+
 // #[wasm_bindgen(inline_js = "export function eth() { console.log(window.ethereum); }")]
 #[wasm_bindgen]
 extern "C" {
     // fn eth();
     #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
+    pub fn log(s: &str);
 }
 
 fn contract_init() {
@@ -38,7 +40,8 @@ pub fn App() -> Html {
     let counter = use_state(|| 0);
     let onclick = {
         log("hello world");
-        contract_init();
+        //contract_init();
+        get_contract();
         let counter = counter.clone();
         move |_| {
             let value = *counter + 1;
