@@ -18,3 +18,11 @@ window.ethereum.request({
 ask to sign a message for us, although we get an error that this has been disabled
 
 [list of rpc methods](https://ethereum.org/en/developers/docs/apis/json-rpc/#json-rpc-methods)
+
+[example on how to deploy and interact with smart contarct](https://github.com/tomusdrw/rust-web3/blob/master/examples/contract_storage.rs)
+[here is contract file](https://github.com/tomusdrw/rust-web3/blob/master/examples/contracts/SimpleStorage.sol)
+
+compile contract
+```
+solc -o build --bin --abi contracts/*.sol
+```

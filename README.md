@@ -27,3 +27,9 @@ If doing smart contract development, you can run a local node using [anvil](http
 ```sh
 anvil
 ```
+
+## TODO
+
+- [ ] cli to deploy contract onto net
+- [ ] reimplement some parts of yew-etherum-provider
+- [ ] write handler functions to interact with the smart contract
