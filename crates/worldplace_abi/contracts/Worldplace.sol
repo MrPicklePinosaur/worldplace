@@ -64,18 +64,18 @@ contract Worldplace {
     uint32 c = grid[keccak256(abi.encode(pos))];
     return decodeColor(c);
   }
-  function get_place() external view returns(uint8[][][] memory){
-    uint8[][][] memory array = new uint8[][][](height);
+  function get_place() external view returns(uint8[][] memory){
+    uint8[][] memory array = new uint8[][](height);
     for (uint32 y = 0; y < height; y++) {
-      array[y] = new uint8[][](width);
       for (uint32 x = 0; x< width; x++) {
         Pos memory pos = Pos(x,y);
         (uint8 r,uint8 g,uint8 b,uint8 a) = get_pixel(pos);
-        array[y][x] = new uint8[](4);
-        array[y][x][0] = r;
-        array[y][x][1] = g;
-        array[y][x][2] = b;
-        array[y][x][3] = a;
+        uint32 p = y*height+x;
+        array[p] = new uint8[](4);
+        array[p][0] = r;
+        array[p][1] = g;
+        array[p][2] = b;
+        array[p][3] = a;
 
       }
     }
