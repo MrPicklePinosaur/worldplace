@@ -32,6 +32,14 @@ fn contract_init() {
     });
 }
 
+async fn deploy_contract() -> web3::contract::Result<()> {
+    let transport = web3::transports::Http::new("http://localhost:8545")?;
+    let web3 = web3::Web3::new(transport);
+    let accounts = web3.eth().accounts().await?;
+
+    Ok(())
+}
+
 #[function_component]
 pub fn App() -> Html {
     let counter = use_state(|| 0);
