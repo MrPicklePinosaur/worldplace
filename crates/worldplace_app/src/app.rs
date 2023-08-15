@@ -7,7 +7,7 @@ use yew_ethereum_provider::{
     chain, AccountLabel, ConnectButton, EthereumContextProvider, SwitchNetworkButton,
 };
 
-use crate::contract::get_contract;
+use crate::contract::{get_contract, metamask_transport, moonbase_transport};
 
 // #[wasm_bindgen(inline_js = "export function eth() { console.log(window.ethereum); }")]
 #[wasm_bindgen]
@@ -18,12 +18,8 @@ extern "C" {
 }
 
 fn contract_init() {
-    // let transport = web3::transports::Http::new("http://localhost:8545").unwrap();
-    let transport = web3::transports::eip_1193::Eip1193::new(
-        web3::transports::eip_1193::Provider::default()
-            .unwrap()
-            .unwrap(),
-    );
+    //let transport = web3::transports::Http::new("http://localhost:8545").unwrap();
+    let transport = metamask_transport();
     let web3 = web3::Web3::new(transport);
     wasm_bindgen_futures::spawn_local(async move {
         let accounts = web3.eth().accounts().await.unwrap();
@@ -40,8 +36,15 @@ pub fn App() -> Html {
     let counter = use_state(|| 0);
     let onclick = {
         log("hello world");
-        //contract_init();
-        get_contract();
+        contract_init();
+
+        wasm_bindgen_futures::spawn_local(async move {
+            get_contract(
+                moonbase_transport(),
+                "58fb45eb500c0e6e5b6b87e2cb5b079e81ce32fb",
+            )
+            .await;
+        });
         let counter = counter.clone();
         move |_| {
             let value = *counter + 1;

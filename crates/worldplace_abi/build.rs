@@ -11,6 +11,10 @@ use std::{
 // };
 
 pub fn main() {
+    //println!("cargo:rerun-if-changed=abi/Worldplace.bin");
+    //println!("cargo:rerun-if-changed=abi/Worldplace.abi");
+    //println!("cargo:rerun-if-changed=contracts/*.sol");
+
     let mut handle = Command::new("solc")
         .args(vec!["-o", "abi", "--bin", "--abi", "contracts/*.sol"])
         .spawn()
